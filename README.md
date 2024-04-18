@@ -2,7 +2,7 @@
 
 this repo provides a re-production of nextjs multi cookie bug.
 
-when set multi cookie with same name, if would merged into one `set-cookie` header.
+when set multi cookie with same name, it would merged into one `set-cookie` header, then when response to client, only the last one remains
 
 ## Re-Production
 ```
@@ -20,5 +20,9 @@ set-cookie: session=1713406956812; Path=/; Domain=.example2.com; Secure; HttpOnl
 
 ### Current
 ```
+## server response
 set-cookie: session=1713406956812; Path=/; Domain=.example1.com; Secure; HttpOnly; SameSite=none, session=1713406956812; Path=/; Domain=.example2.com; Secure; HttpOnly; SameSite=none
+
+## dev-tools response header
+Set-Cookie: session=1713407480483; Path=/; Domain=.example2.com; Secure; HttpOnly; SameSite=none
 ```
