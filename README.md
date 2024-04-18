@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# nextjs multi cookie with same name bug
 
-## Getting Started
+this repo provides a re-production of nextjs multi cookie bug.
 
-First, run the development server:
+when set multi cookie with same name, if would merged into one `set-cookie` header.
 
-```bash
-npm run dev
-# or
+## Re-Production
+```
+yarn
 yarn dev
-# or
-pnpm dev
-# or
-bun run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+then open `${host}/api/test`, open dev-tools or read terminal output, you would find `set-cookie` headers.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Expected
+```
+set-cookie: session=1713406956812; Path=/; Domain=.example1.com; Secure; HttpOnly; SameSite=none
+set-cookie: session=1713406956812; Path=/; Domain=.example2.com; Secure; HttpOnly; SameSite=none
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Current
+```
+set-cookie: session=1713406956812; Path=/; Domain=.example1.com; Secure; HttpOnly; SameSite=none, session=1713406956812; Path=/; Domain=.example2.com; Secure; HttpOnly; SameSite=none
+```
